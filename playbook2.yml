@@ -1,0 +1,16 @@
+---
+- name: Deploy a WAR file on Tomcat server
+  hosts: webservers
+  become: true
+  become_user: root
+  tasks:
+    - name: Install Tomcat on host servers
+      package: name=tomcat state=present
+    - name: Start Tomcat service
+      service: name=tomcat  state=started
+    - name: Deploy the WAR file on host servers
+      get_url:
+        url=https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
+        dest=/usr/share/tomcat/webapps
+    - name: Restart Tomcat on webserver
+      service: name=tomcat  state=restarted
